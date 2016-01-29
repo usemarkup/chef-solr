@@ -12,10 +12,10 @@ Java
 
 ### Version/Download Attributes
 
-version: Will change the version of SOLR to install. Must be 5.3.0 or higher.
-link: The remote path to download the solr tar file from
-checksum: The sha256 checksum of the tar file
-download: The path to download the tar file to before extraction
+- version: Will change the version of SOLR to install. Must be 5.3.0 or higher.
+- link: The remote path to download the solr tar file from
+- checksum: The sha256 checksum of the tar file
+- download: The path to download the tar file to before extraction
 
 ```ruby
 default["solr"]["version"] = "5.3.0"
@@ -40,9 +40,9 @@ Each of these attributes alter solr envrionment configuration options located (b
 
 None of these are required but it makes sense to set these to your OS approprate locations. If these are set then chef will ensure the directory exists with appropriate permissions.
 
-pidfile_path: Change the path that the pid file is saved to.
-log_path: Change the path that log files are saved to.
-home_path: Change the solr home (date directory) path.
+- pidfile_path: Change the path that the pid file is saved to.
+- log_path: Change the path that log files are saved to.
+- home_path: Change the solr home (date directory) path.
 
 ```ruby
 default["solr"]["pidfile_path"] = nil
