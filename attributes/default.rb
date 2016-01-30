@@ -7,7 +7,10 @@ end
 default["solr"]["version"] = "5.3.0"
 default["solr"]["link"] = "http://archive.apache.org/dist/lucene/solr/#{node['solr']['version']}/solr-#{node['solr']['version']}.tgz"
 default["solr"]["checksum"] = "26aec63d81239a65f182f17bbf009b1070f7db0bb83657ac2a67a08b57227f7c" #sha256
-default["solr"]["download"] = "/var/chef"
+default["solr"]["download"] = "#{Chef::Config[:file_cache_path]}"
+
+default["solr"]["install_java"] = true
+default["solr"]["jdk_version"] = 7
 
 default["solr"]["install"] = "/opt"
 default["solr"]["directory"] = "/var/solr"

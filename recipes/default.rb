@@ -2,30 +2,30 @@
 # Cookbook Name:: solr
 # Recipe:: default
 
-include_recipe 'java'
 package 'lsof'
 
+if node['solr']['install_java']
+    node.override[:java][:jdk_version] = node[:solr][:jdk_version]
+
+    include_recipe 'java'
+end
+
 remote_file "#{node['solr']['download']}/solr-#{node['solr']['version']}.tgz" do
-  source   node['solr']['link']
-  checksum node['solr']['checksum']
-  mode     0644
+  source    node['solr']['link']
+  checksum  node['solr']['checksum']
+  mode      0644
+  notifies  :run, "bash[unpacksolr]", :immediately
 end
 
-user 'solr' do
-  home "#{node['solr']['install']}"
-  system true
-  shell '/bin/bash'
+bash 'unpacksolr' do
+  code      "tar xzf #{node['solr']['download']}/solr-#{node['solr']['version']}.tgz -C #{node['solr']['download']}"
+  action    :nothing
+  notifies  :run, "bash[installsolr]", :immediately
 end
 
-bash 'unpack solr' do
-  code   "tar xzf #{node['solr']['download']}/solr-#{node['solr']['version']}.tgz -C /var/chef/"
-  not_if "test -d #{node['solr']['download']}/solr-#{node['solr']['version']}"
-  not_if "test `sha256sum #{node['solr']['download']}` = `#{node['solr']['checksum']}`"
-end
-
-bash 'install solr' do
-  code "#{node['solr']['download']}/solr-#{node['solr']['version']}/bin/install_solr_service.sh #{node['solr']['download']}/solr-#{node['solr']['version']}.tgz -d #{node['solr']['directory']} -i #{node['solr']['install']} -p #{node['solr']['port']} -s #{node['solr']['service']} -u #{node['solr']['user']}"
-  not_if "test -d /#{node['solr']['install']}/solr"
+bash 'installsolr' do
+  code      "#{node['solr']['download']}/solr-#{node['solr']['version']}/bin/install_solr_service.sh #{node['solr']['download']}/solr-#{node['solr']['version']}.tgz -d #{node['solr']['directory']} -i #{node['solr']['install']} -p #{node['solr']['port']} -s #{node['solr']['service']} -u #{node['solr']['user']}"
+  action    :nothing
 end
 
 service 'solr' do
@@ -80,4 +80,3 @@ ruby_block "modify config solr.in.sh" do
     end
   notifies :restart, resources(:service => "solr"), :delayed
 end
-
