@@ -1,3 +1,6 @@
+# Build Status
+[![Circle CI](https://circleci.com/gh/usemarkup/chef-solr/tree/master.svg?style=svg)](https://circleci.com/gh/usemarkup/chef-solr/tree/master)
+
 # DESCRIPTION:
 
 This chef cookbook is designed to install [Solr](http://lucene.apache.org/solr/) 5.3+ and run it as a standalone service. Tested on Centos 6.4 only but should run on other Linux distros.
