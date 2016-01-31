@@ -10,6 +10,13 @@ if node['solr']['install_java']
     include_recipe 'java'
 end
 
+user 'solr' do
+   home "#{node['solr']['install']}"
+   system true
+   shell '/bin/bash'
+   ignore_failure true
+end
+
 remote_file "#{node['solr']['download']}/solr-#{node['solr']['version']}.tgz" do
   source    node['solr']['link']
   checksum  node['solr']['checksum']
