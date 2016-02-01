@@ -10,7 +10,7 @@ default["solr"]["checksum"] = "26aec63d81239a65f182f17bbf009b1070f7db0bb83657ac2
 default["solr"]["download"] = "#{Chef::Config[:file_cache_path]}"
 
 default["solr"]["install_java"] = true
-default["solr"]["jdk_version"] = 7
+default["solr"]["jdk_version"] = 8
 
 default["solr"]["install"] = "/opt"
 default["solr"]["directory"] = "/var/solr"
