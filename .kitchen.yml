@@ -7,7 +7,13 @@ provisioner:
   require_chef_omnibus: "12.6.0"
 
 platforms:
-  - name: centos-6.6
+  - name: centos-7.0
+    driver_config:
+      image: centos:7
+      platform: rhel
+      provision_command:
+        - /bin/yum install -y initscripts net-tools wget
+
 
 suites:
   - name: default
