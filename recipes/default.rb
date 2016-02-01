@@ -26,12 +26,14 @@ end
 
 bash 'unpacksolr' do
   code      "tar xzf #{node['solr']['download']}/solr-#{node['solr']['version']}.tgz -C #{node['solr']['download']}"
+  not_if "test -d #{node['solr']['download']}/solr-#{node['solr']['version']}"
   action    :nothing
   notifies  :run, "bash[installsolr]", :immediately
 end
 
 bash 'installsolr' do
   code      "#{node['solr']['download']}/solr-#{node['solr']['version']}/bin/install_solr_service.sh #{node['solr']['download']}/solr-#{node['solr']['version']}.tgz -d #{node['solr']['directory']} -i #{node['solr']['install']} -p #{node['solr']['port']} -s #{node['solr']['service']} -u #{node['solr']['user']}"
+  not_if "test -d /#{node['solr']['install']}/solr"
   action    :nothing
 end
 
