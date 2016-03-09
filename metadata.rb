@@ -1,5 +1,5 @@
 name                "solr"
-version             "1.2.0"
+version             "1.3.0"
 description         "Install and configure Solr. Defaults to version 5.3"
 maintainer          "Markup"
 depends             "java"
