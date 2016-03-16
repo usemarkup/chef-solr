@@ -86,6 +86,10 @@ ruby_block "modify config solr.in.sh" do
         file.search_file_replace_line(/SOLR_PID_DIR.*/, "SOLR_PID_DIR=\"#{node['solr']['pidfile_path']}\"")
         file.write_file
       end
+      unless node[:solr][:solr_heap].nil?
+        file.search_file_replace_line(/SOLR_HEAP.*/, "SOLR_HEAP=\"#{node['solr']['solr_heap']}\"")
+        file.write_file
+      end
     end
   notifies :restart, resources(:service => "solr"), :delayed
 end
