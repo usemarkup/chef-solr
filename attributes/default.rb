@@ -22,3 +22,5 @@ default["solr"]["user"] = "solr"
 default["solr"]["pidfile_path"] = nil
 default["solr"]["log_path"] = nil
 default["solr"]["home_path"] = nil
+default["solr"]["solr_heap"] = "512m"
+
