@@ -2,3 +2,11 @@
 driver:
   name: docker
   privileged: true
+
+platforms:
+  - name: centos-6.7
+    driver_config:
+      image: centos:6.7
+      platform: rhel
+      provision_command:
+        - yum install -y initscripts net-tools wget cronie
