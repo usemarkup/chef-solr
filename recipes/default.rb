@@ -93,3 +93,20 @@ ruby_block "modify config solr.in.sh" do
     end
   notifies :restart, resources(:service => "solr"), :delayed
 end
+
+log_path = '/var/log/solr/'
+
+unless node[:solr][:log_path].nil?
+  log_path = node['solr']['log_path']
+end
+
+logrotate_app 'solr-log' do
+  cookbook 'logrotate'
+  path "#{log_path}*.log"
+  options ['missingok', 'compress', 'notifempty']
+  frequency 'daily'
+  rotate 30
+  template_owner 'solr'
+  template_group 'solr'
+  create '775 solr solr'
+end
