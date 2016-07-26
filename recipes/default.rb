@@ -102,7 +102,7 @@ end
 
 logrotate_app 'solr-log' do
   cookbook 'logrotate'
-  path "#{log_path}*.log"
+  path "#{log_path}/*.log"
   options ['missingok', 'compress', 'notifempty']
   frequency 'daily'
   rotate 30
