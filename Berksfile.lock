@@ -12,7 +12,7 @@ GRAPH
     apt (>= 0.0.0)
     windows (>= 0.0.0)
   logrotate (1.9.2)
-  solr (1.5.0)
+  solr (1.5.1)
     java (>= 0.0.0)
     logrotate (~> 1.9.2)
   windows (1.44.1)

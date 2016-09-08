@@ -3,6 +3,7 @@
 # Recipe:: default
 
 package 'lsof'
+package 'patch'
 
 if node['solr']['install_java']
     node.override[:java][:jdk_version] = node[:solr][:jdk_version]
@@ -39,7 +40,7 @@ end
 
 service 'solr' do
   supports :status => true, :restart => true, :reload => true
-  action [ :enable, :start ]
+  action [ :enable ]
   retry_delay 5
   retries 3
 end
@@ -91,6 +92,7 @@ ruby_block "modify config solr.in.sh" do
         file.write_file
       end
     end
+  notifies :start, resources(:service => "solr"), :delayed
   notifies :restart, resources(:service => "solr"), :delayed
 end
 
@@ -110,3 +112,18 @@ logrotate_app 'solr-log' do
   template_group 'solr'
   create '775 solr solr'
 end
+
+template '/tmp/war-issue.patch' do
+  source 'war-issue.patch'
+  owner 'solr'
+  group 'solr'
+  mode '0755'
+end
+
+execute 'patch-solr' do
+  command 'patch -N --ignore-whitespace solr < /tmp/war-issue.patch'
+  cwd "#{node['solr']['install']}/solr/bin"
+  ignore_failure true
+  user 'solr'
+end
+
