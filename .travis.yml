@@ -1,0 +1,30 @@
+language: ruby
+dist: trusty
+
+matrix:
+  include:
+    - rvm: 2.3
+      env: suite=solr-centos-7-chef-12
+    - rvm: 2.3
+      env: suite=solr53-centos-7-chef-12
+#    - rvm: 2.3
+#      env: suite=solr6-centos-7-chef-12
+    - rvm: 2.3
+      env: suite=solr-centos-69-chef-12
+    - rvm: 2.3
+      env: suite=solr53-centos-69-chef-12
+    - rvm: 2.3
+      env: suite=solr6-centos-69-chef-12
+    - rvm: 2.3
+      env: suite=solr-and-install-java-centos-69-chef-12-without-java
+
+sudo: required
+services: docker
+
+group: deprecated-2017Q2
+
+before_script:
+  - make install
+  - make bundle
+
+script: bundle exec kitchen test "$suite"
