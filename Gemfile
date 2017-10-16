@@ -1,11 +1,15 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
 # Chef
-gem "berkshelf", "~> 3.1.4"
-gem "chef", "~> 12.6.0"
-gem "chef-zero", "~> 4.5.0"
-gem 'knife-solo', "~> 0.5.1"
-gem "test-kitchen", "~> 1.4.0"
-gem "kitchen-vagrant", "~> 0.19.0"
-gem "kitchen-docker", "~> 2.3.0"
-gem "rack", "1.6.4"
+gem 'berkshelf', '~> 6'
+gem 'chef', '~> 12.7.2'
+gem 'knife-solo'
+
+gem 'inspec'
+gem 'test-kitchen'
+gem 'kitchen-docker'
+gem 'kitchen-inspec'
+
+gem 'cookstyle'
+
+gem 'stove'

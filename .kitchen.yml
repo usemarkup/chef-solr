@@ -1,18 +1,99 @@
 ---
 driver:
-  name: vagrant
+  name: docker
+  privileged: true
+  use_sudo: false
+
+platforms:
+  - name: centos-7
+    driver_config:
+      require_chef_omnibus: "13.1.31"
+      image: centos/systemd
+      run_command: /usr/sbin/init
+      privileged: true
+      provision_command:
+        - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+        - systemctl enable sshd.service
+        - yum install net-tools java-1.8.0-openjdk java-1.8.0-openjdk-devel lsof -y && curl -LO https://omnitruck.chef.io/install.sh && sudo bash ./install.sh -v 13.1.31 && rm install.sh
+
+  - name: centos-7-chef-12
+    driver_config:
+      require_chef_omnibus: "12.7.2"
+      image: centos/systemd
+      run_command: /usr/sbin/init
+      privileged: true
+      provision_command:
+        - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+        - systemctl enable sshd.service
+        - yum install net-tools java-1.8.0-openjdk java-1.8.0-openjdk-devel lsof -y && curl -LO https://omnitruck.chef.io/install.sh && sudo bash ./install.sh -v 12.7.2 && rm install.sh
+
+  - name: centos-69-chef-12
+    driver_config:
+      require_chef_omnibus: "12.7.2"
+      image: centos:6.9
+      privileged: true
+      provision_command:
+        - yum install net-tools java-1.8.0-openjdk java-1.8.0-openjdk-devel lsof -y && curl -LO https://omnitruck.chef.io/install.sh && sudo bash ./install.sh -v 12.7.2 && rm install.sh
+
+  - name: centos-69-chef-12-without-java
+    driver_config:
+      require_chef_omnibus: "12.7.2"
+      image: centos:6.9
+      privileged: true
+      provision_command:
+        - yum install net-tools -y && curl -LO https://omnitruck.chef.io/install.sh && sudo bash ./install.sh -v 12.7.2 && rm install.sh
 
 provisioner:
   name: chef_solo
-  require_chef_omnibus: "12.6.0"
 
-platforms:
-  - name: gsdev/centos-6-7-minimal-chef-12-6-0
-    driver_config:
-      platform: rhel
+verifier:
+  name: inspec
 
 suites:
-  - name: default
-    run_list:
-      - recipe[solr::default]
+  - name: solr
     attributes:
+      solr:
+        install_java: false
+    excludes:
+      - centos-69-chef-12-without-java
+    run_list:
+      - recipe[solr]
+    verifier:
+      inspec_tests:
+        - tests/solr.rb
+  - name: solr-and-install-java
+    run_list:
+      - recipe[solr]
+    excludes:
+      - centos-7-chef-12
+      - centos-7
+      - centos-69-chef-12
+    verifier:
+      inspec_tests:
+        - tests/solr.rb
+  - name: solr6
+    attributes:
+      solr:
+        install_java: false
+        version: "6.6.1"
+        checksum: "6572370027fc78f2d9fa2d694705868a4e86254278974d0b48eed41ea3feff1c"
+    excludes:
+      - centos-69-chef-12-without-java
+    run_list:
+      - recipe[solr]
+    verifier:
+      inspec_tests:
+        - tests/solr.rb
+  - name: solr53
+    attributes:
+      solr:
+        install_java: false
+        version: "5.3.0"
+        checksum: "26aec63d81239a65f182f17bbf009b1070f7db0bb83657ac2a67a08b57227f7c"
+    excludes:
+      - centos-69-chef-12-without-java
+    run_list:
+      - recipe[solr]
+    verifier:
+      inspec_tests:
+        - tests/solr.rb

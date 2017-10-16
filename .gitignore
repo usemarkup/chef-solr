@@ -5,5 +5,10 @@
 bin/*
 .bundle/*
 
+Berksfile.lock
+Gemfile.lock
+
+vendor/
+
 .kitchen/
 .kitchen.local.yml
