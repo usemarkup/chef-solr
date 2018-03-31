@@ -97,18 +97,18 @@ fi
       EOH
 end
 
-service 'solr' do
-  if node['platform_version'].to_i > 6
-    provider Chef::Provider::Service::Systemd
-  end
-  supports status: true, restart: true, enable: true, start: true
-  action [:enable, :start]
-end
-
 # As of Solr >5.4 this is where the solr.in.sh is stored
 template '/etc/default/solr.in.sh' do
   source 'solr.in.sh.erb'
   variables ({ solr: node['solr'] })
   cookbook node['solr']['cookbook']
   notifies :restart, 'service[solr]', :delayed
+end
+
+service 'solr' do
+  if node['platform_version'].to_i > 6
+    provider Chef::Provider::Service::Systemd
+  end
+  supports status: true, restart: true, enable: true, start: true
+  action [:enable, :start]
 end
