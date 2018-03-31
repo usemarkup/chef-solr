@@ -1,5 +1,5 @@
 name                'solr'
-version             '3.0.0'
+version             '3.0.1'
 description         'Install and configure Solr. Defaults to version 5.3'
 maintainer          'Markup'
 
