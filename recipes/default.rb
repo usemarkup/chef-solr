@@ -99,10 +99,18 @@ end
 
 # As of Solr >5.4 this is where the solr.in.sh is stored
 template '/etc/default/solr.in.sh' do
+  atomic_update false
   source 'solr.in.sh.erb'
+  owner node['solr']['user']
   variables ({ solr: node['solr'] })
   cookbook node['solr']['cookbook']
   notifies :restart, 'service[solr]', :delayed
+end
+
+# For BC with Solr 5.3 lets just symlink the file
+link "#{node['solr']['install']}/solr/bin/solr.in.sh" do
+  owner node['solr']['user']
+  to '/etc/default/solr.in.sh'
 end
 
 service 'solr' do
