@@ -82,6 +82,13 @@ echo 'solr-installed' > /tmp/solr-installed
       EOH
 end
 
+# delete the flag that solr was just installed
+file '/tmp/solr-installed' do
+  action :delete
+  only_if { ::File.exist?('/tmp/solr-installed') }
+  notifies :stop, 'service[solr]', :immediately
+end
+
 directory 'solr_log' do
   path node['solr']['log_path']
   owner 'solr'
@@ -118,13 +125,6 @@ template "#{node['solr']['directory']}/solr.in.sh" do
   variables ({ solr: node['solr'] })
   cookbook node['solr']['cookbook']
   notifies :restart, 'service[solr]', :delayed
-end
-
-# delete the flag that solr was just installed
-file '/tmp/solr-installed' do
-  action :delete
-  only_if { ::File.exist?('/tmp/solr-installed') }
-  notifies :stop, 'service[solr]', :immediately
 end
 
 service 'solr' do
