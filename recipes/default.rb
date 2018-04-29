@@ -87,6 +87,9 @@ if [ -f #{node['solr']['install']}/solr/bin/solr ]; then
   fi
 fi
 
+# Flag we just installed solr
+echo 'solr-installed' > /tmp/solr-installed
+
 #{node['solr']['download']}/solr-#{node['solr']['version']}/bin/install_solr_service.sh \
   #{node['solr']['download']}/solr-#{node['solr']['version']}.tgz \
   -d #{node['solr']['directory']} \
@@ -111,6 +114,13 @@ end
 link "#{node['solr']['install']}/solr/bin/solr.in.sh" do
   owner node['solr']['user']
   to '/etc/default/solr.in.sh'
+end
+
+# delete the flag that solr was just installed
+file '/tmp/solr-installed' do
+  action :delete
+  only_if { ::File.exist?('/tmp/solr-installed') }
+  notifies :stop, 'service[solr]', :immediately
 end
 
 service 'solr' do
