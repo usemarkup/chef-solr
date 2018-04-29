@@ -124,9 +124,6 @@ file '/tmp/solr-installed' do
 end
 
 service 'solr' do
-  if node['platform_version'].to_i > 6
-    provider Chef::Provider::Service::Systemd
-  end
   supports status: true, restart: true, enable: true, start: true
   action [:enable]
 end
