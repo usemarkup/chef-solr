@@ -12,24 +12,6 @@ user 'solr' do
   shell '/bin/bash'
 end
 
-directory 'solr_log' do
-  path node['solr']['log_path']
-  owner 'solr'
-  group 'solr'
-  mode '0755'
-  action :create
-  only_if { node['solr']['log_path'] }
-end
-
-directory 'solr_pidfile' do
-  path node['solr']['pidfile_path']
-  owner 'solr'
-  group 'solr'
-  mode '0755'
-  action :create
-  only_if { node['solr']['pidfile_path'] }
-end
-
 remote_file "#{node['solr']['download']}/solr-#{node['solr']['version']}.tgz" do
   source    "https://#{node['solr']['host']}/dist/lucene/solr/#{node['solr']['version']}/solr-#{node['solr']['version']}.tgz"
   checksum  node['solr']['checksum']
@@ -100,6 +82,24 @@ echo 'solr-installed' > /tmp/solr-installed
       EOH
 end
 
+directory 'solr_log' do
+  path node['solr']['log_path']
+  owner 'solr'
+  group 'solr'
+  mode '0755'
+  action :create
+  only_if { node['solr']['log_path'] }
+end
+
+directory 'solr_pidfile' do
+  path node['solr']['pidfile_path']
+  owner 'solr'
+  group 'solr'
+  mode '0755'
+  action :create
+  only_if { node['solr']['pidfile_path'] }
+end
+
 # Create a default solr.in.sh
 template '/etc/default/solr.in.sh' do
   atomic_update false
@@ -111,7 +111,7 @@ template '/etc/default/solr.in.sh' do
 end
 
 # Create a default solr.in.sh in the solr directory
-template "#{node['node']['directory']}/solr.in.sh" do
+template "#{node['solr']['directory']}/solr.in.sh" do
   atomic_update false
   source 'solr.in.sh.erb'
   owner node['solr']['user']
@@ -128,8 +128,8 @@ file '/tmp/solr-installed' do
 end
 
 service 'solr' do
-  if node['platform_version'].to_i > 6	
-    provider Chef::Provider::Service::Systemd	
+  if node['platform_version'].to_i > 6
+    provider Chef::Provider::Service::Systemd
   end
   supports status: true, restart: true, enable: true, start: true
   action [:enable]
