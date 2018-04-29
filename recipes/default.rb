@@ -103,7 +103,7 @@ echo 'solr-installed' > /tmp/solr-installed
       EOH
 end
 
-# As of Solr >5.4 this is where the solr.in.sh is stored
+# Create a default solr.in.sh
 template '/etc/default/solr.in.sh' do
   atomic_update false
   source 'solr.in.sh.erb'
@@ -113,8 +113,8 @@ template '/etc/default/solr.in.sh' do
   notifies :restart, 'service[solr]', :delayed
 end
 
-# For BC with Solr 5.3 lets just symlink the file
-link "#{node['solr']['install']}/solr/bin/solr.in.sh" do
+# link the solr.in.sh
+link "#{node['solr']['directory']}/solr.in.sh" do
   owner node['solr']['user']
   to '/etc/default/solr.in.sh'
 end
