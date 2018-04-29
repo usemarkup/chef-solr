@@ -1,6 +1,6 @@
-default['solr']['version'] = '5.5.4'
+default['solr']['version'] = '5.5.5'
 default['solr']['host'] = 'archive.apache.org'
-default['solr']['checksum'] = 'c1528e4afc9a0b8e7e5be0a16f40bb4080f410d502cd63b4447d448c49e9f500'
+default['solr']['checksum'] = '2bbe3a55976f118c5d8c2382d4591257f6e2af779c08c6561e44afa3181a87c1'
 default['solr']['force_upgrade'] = false
 default['solr']['download'] = Chef::Config[:file_cache_path]
 
