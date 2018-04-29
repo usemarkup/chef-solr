@@ -1,8 +1,5 @@
 package 'lsof'
 
-# Solr doesn't really support systemd
-package 'initscripts'
-
 if node['solr']['install_java']
   node.override['java']['jdk_version'] = node['solr']['jdk_version']
 
@@ -113,10 +110,14 @@ template '/etc/default/solr.in.sh' do
   notifies :restart, 'service[solr]', :delayed
 end
 
-# link the solr.in.sh
-link "#{node['solr']['directory']}/solr.in.sh" do
+# Create a default solr.in.sh in the solr directory
+template "#{node['node']['directory']}/solr.in.sh" do
+  atomic_update false
+  source 'solr.in.sh.erb'
   owner node['solr']['user']
-  to '/etc/default/solr.in.sh'
+  variables ({ solr: node['solr'] })
+  cookbook node['solr']['cookbook']
+  notifies :restart, 'service[solr]', :delayed
 end
 
 # delete the flag that solr was just installed
@@ -127,6 +128,9 @@ file '/tmp/solr-installed' do
 end
 
 service 'solr' do
+  if node['platform_version'].to_i > 6	
+    provider Chef::Provider::Service::Systemd	
+  end
   supports status: true, restart: true, enable: true, start: true
   action [:enable]
 end
