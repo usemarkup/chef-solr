@@ -1,5 +1,8 @@
 package 'lsof'
 
+# Solr doesn't really support systemd
+pakage 'initscripts'
+
 if node['solr']['install_java']
   node.override['java']['jdk_version'] = node['solr']['jdk_version']
 
