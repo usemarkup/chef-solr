@@ -20,7 +20,6 @@ default['solr']['service'] = 'solr'
 default['solr']['user'] = 'solr'
 default['solr']['cookbook'] = 'solr'
 
-default['solr']['pidfile_path'] = '/var/run/solr'
 default['solr']['log_path'] = '/var/log/solr'
 default['solr']['home_path'] = nil
 default['solr']['solr_heap'] = '512m'
