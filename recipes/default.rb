@@ -85,7 +85,7 @@ execute '/tmp/solr-installed' do
   command '/etc/init.d/solr stop'
   retries 5
   retry_delay 10
-  only_if { ::File.exist?("#{node['solr']['directory']/solr-8983.pid}") }
+  only_if { ::File.exist?("#{node['solr']['directory']}/solr-8983.pid}") }
 end
 
 directory 'solr_log' do
