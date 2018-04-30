@@ -69,9 +69,6 @@ if [ -f #{node['solr']['install']}/solr/bin/solr ]; then
   fi
 fi
 
-# Flag we just installed solr
-echo 'solr-installed' > /tmp/solr-installed
-
 #{node['solr']['download']}/solr-#{node['solr']['version']}/bin/install_solr_service.sh \
   #{node['solr']['download']}/solr-#{node['solr']['version']}.tgz \
   -d #{node['solr']['directory']} \
@@ -82,11 +79,12 @@ echo 'solr-installed' > /tmp/solr-installed
       EOH
 end
 
-# delete the flag that solr was just installed
-file '/tmp/solr-installed' do
-  action :delete
-  only_if { ::File.exist?('/tmp/solr-installed') }
-  notifies :stop, 'service[solr]', :immediately
+# The solr installer will boot solr, however it will be in the
+# wrong configuration, this attempts to stop it
+execute '/tmp/solr-installed' do
+  command '/etc/init.d/solr stop'
+  only_if { ::File.exist?("#{node['solr']['directory']/solr-8983.pid}") }
+  ignore_failure true
 end
 
 directory 'solr_log' do
