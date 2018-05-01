@@ -69,6 +69,8 @@ if [ -f #{node['solr']['install']}/solr/bin/solr ]; then
   fi
 fi
 
+echo "installed" > /tmp/solr-installed
+
 #{node['solr']['download']}/solr-#{node['solr']['version']}/bin/install_solr_service.sh \
   #{node['solr']['download']}/solr-#{node['solr']['version']}.tgz \
   -d #{node['solr']['directory']} \
@@ -138,5 +140,5 @@ service 'solr' do
     provider Chef::Provider::Service::Systemd
   end
   supports status: true, restart: true, enable: true, start: true
-  action [:enable]
+  action [:enable, :start]
 end
