@@ -126,6 +126,13 @@ template "#{node['solr']['directory']}/solr.in.sh" do
   notifies :restart, 'service[solr]', :delayed
 end
 
+if node['platform_version'].to_i > 6
+  file '/usr/lib/tmpfiles.d/solr.conf' do
+    content 'D /var/run/solr 0755 solr solr -'
+    mode '0755'
+  end
+end
+
 service 'solr' do
   if node['platform_version'].to_i > 6
     provider Chef::Provider::Service::Systemd
