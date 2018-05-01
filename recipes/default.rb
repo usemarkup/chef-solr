@@ -140,5 +140,5 @@ service 'solr' do
     provider Chef::Provider::Service::Systemd
   end
   supports status: true, restart: true, enable: true, start: true
-  action [:enable, :start]
+  action [:enable]
 end
