@@ -1,4 +1,5 @@
 package 'lsof'
+package 'initscripts'
 
 if node['solr']['install_java']
   node.override['java']['jdk_version'] = node['solr']['jdk_version']
