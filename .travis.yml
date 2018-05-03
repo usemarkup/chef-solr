@@ -15,8 +15,8 @@ matrix:
       env: suite=solr53-centos-69-chef-12
     - rvm: 2.3
       env: suite=solr6-centos-69-chef-12
-    - rvm: 2.3
-      env: suite=solr-and-install-java-centos-69-chef-12-without-java
+#    - rvm: 2.3
+#      env: suite=solr-and-install-java-centos-69-chef-12-without-java
 
 sudo: required
 services: docker
