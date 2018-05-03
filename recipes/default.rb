@@ -55,7 +55,7 @@ if [ -f #{node['solr']['install']}/solr/bin/solr ]; then
   else
     version=$(#{node['solr']['install']}/solr/bin/solr -v)
 
-    if [ "${version}" == "#{node['solr']['version']}" ]; then
+    if [ $version == "#{node['solr']['version']}" ]; then
       echo "Solr Version #{node['solr']['version']} is already, skipping"
       exit
     fi
