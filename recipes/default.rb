@@ -50,21 +50,22 @@ if [ -f #{node['solr']['install']}/solr/bin/solr ]; then
         echo "Solr 5.3.0 already installed, we cannot detect the exact version correctly so aborting"
         echo "Either upgrade solr with the force or manually upgrade to at least 5.4"
         echo "set force_upgrade to true"
-        exit
+        return
      fi
   else
     version=$(#{node['solr']['install']}/solr/bin/solr -v)
 
     if [ "$version" == "#{node['solr']['version']}" ]; then
       echo "Solr Version #{node['solr']['version']} is already, skipping"
-      exit
+      return
     fi
 
     if [ "$version" == "#{node['solr']['version']}" ]; then
       if [ "#{node['solr']['force_upgrade']}" == "false" ]; then
         echo "Solr Version mismatch, but force_upgrade is false, so skipping upgrading"
         echo "Set force_upgrade to true if you wish to upgrade also"
-        exit
+        
+        return
       fi
     fi
   fi
@@ -85,7 +86,7 @@ end
 # The solr installer will boot solr, however it will be in the
 # wrong configuration, this attempts to stop it
 execute '/tmp/solr-installed' do
-  command '/etc/init.d/solr stop'
+  command '/etc/init.d/solr stop && rm -rf /tmp/solr-installed'
   retries 5
   retry_delay 10
   only_if { ::File.exist?("/tmp/solr-installed") }
