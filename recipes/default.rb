@@ -50,14 +50,14 @@ if [ -f #{node['solr']['install']}/solr/bin/solr ]; then
         echo "Solr 5.3.0 already installed, we cannot detect the exact version correctly so aborting"
         echo "Either upgrade solr with the force or manually upgrade to at least 5.4"
         echo "set force_upgrade to true"
-        return
+        exit 0
      fi
   else
     version=$(#{node['solr']['install']}/solr/bin/solr -v)
 
     if [ "$version" == "#{node['solr']['version']}" ]; then
       echo "Solr Version #{node['solr']['version']} is already, skipping"
-      return
+      exit 0
     fi
 
     if [ "$version" == "#{node['solr']['version']}" ]; then
@@ -65,7 +65,7 @@ if [ -f #{node['solr']['install']}/solr/bin/solr ]; then
         echo "Solr Version mismatch, but force_upgrade is false, so skipping upgrading"
         echo "Set force_upgrade to true if you wish to upgrade also"
         
-        return
+        exit 0
       fi
     fi
   fi
