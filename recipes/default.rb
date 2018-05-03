@@ -55,12 +55,12 @@ if [ -f #{node['solr']['install']}/solr/bin/solr ]; then
   else
     version=$(#{node['solr']['install']}/solr/bin/solr -v)
 
-    if [ $version == "#{node['solr']['version']}" ]; then
+    if [ "$version" == "#{node['solr']['version']}" ]; then
       echo "Solr Version #{node['solr']['version']} is already, skipping"
       exit
     fi
 
-    if [ $version == "#{node['solr']['version']}" ]; then
+    if [ "$version" == "#{node['solr']['version']}" ]; then
       if [ "#{node['solr']['force_upgrade']}" == "false" ]; then
         echo "Solr Version mismatch, but force_upgrade is false, so skipping upgrading"
         echo "Set force_upgrade to true if you wish to upgrade also"
