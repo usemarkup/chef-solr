@@ -21,6 +21,8 @@ default['solr']['user'] = 'solr'
 default['solr']['cookbook'] = 'solr'
 
 default['solr']['pid_file'] = '/var/run/solr'
+# BC legacy
+default['solr']['pidfile_path'] = default['solr']['pid_file']
 default['solr']['log_path'] = '/var/log/solr'
 default['solr']['home_path'] = nil
 default['solr']['solr_heap'] = '512m'
